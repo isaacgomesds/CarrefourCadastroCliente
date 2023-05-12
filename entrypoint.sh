@@ -1,0 +1,1 @@
+/opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P C4rr3f0ur#2023 -d master -i /tmp/init.sql

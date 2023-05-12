@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  csf.cadastrocliente.api:
+    container_name: clienteapi
+    image: ${DOCKER_REGISTRY-}csfcadastroclienteapi
+    build:
+      context: .
+      dockerfile: src/CSF.CadastroCliente.API/Dockerfile
+    ports:
+     - "8081:80"
+    depends_on:
+     - sqlserver
+
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+     SA_PASSWORD: "C4rr3f0ur#2023"
+     ACCEPT_EULA: "Y"
+     MSSQL_PID: "Developer"
+    ports:
+     - "1450:1433"
+
+  mssqltools:
+    container_name: mssqltools
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+     - sqlserver
+    volumes:
+     - ./init.sql:/tmp/init.sql
+     - ./entrypoint.sh:/tmp/entrypoint.sh
+    command: /bin/bash ./tmp/entrypoint.sh
+
+
